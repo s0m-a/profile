@@ -27,7 +27,9 @@ export const useUserStore = create((set, get) => ({
 		set({ loading: true });
 
 		try {
-			const res = await axiosInstance.post("/auth/login", {email, password});
+			const res = await axiosInstance.post("/auth/login", {email, password}, {
+				withCredentials: true
+			});
 			set({ user: res.data, loading: false });
             router.push('/')
 		} catch (error) {
