@@ -77,8 +77,8 @@ export const useUserStore = create((set, get) => ({
   GoogleRegister: async ()=>{
     set({loading: true});
     try {
-      window.location.href = "http://localhost:3001/api/auth/google"; // Redirects to backend route
-      console.log(window.location.href);
+		const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api"; // Redirects to backend route
+		window.location.href = `${apiBaseUrl}/auth/google`;
     } catch (error) {
       console.error(error.response?.data?.message || "Registration failed!");
     }
@@ -88,7 +88,8 @@ export const useUserStore = create((set, get) => ({
   GithubRegister: async () => {
     set({ loading: true });
     try {
-      window.location.href = "http://localhost:3001/api/auth/github"; // Redirects to backend route
+		const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL ||"http://localhost:3001/api"
+        window.location.href = `${apiBaseUrl}/auth/github`;
       console.log(window.location.href);
     } catch (error) {
       console.error(error.response?.data?.message || "Registration failed!");
