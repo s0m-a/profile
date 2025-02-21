@@ -51,6 +51,8 @@ export const useUserStore = create((set, get) => ({
 	checkAuth: async () => {
 		set({ checkingAuth: true });
 		try {
+			console.log("Checking auth...");
+			console.log("Headers being sent:", axiosInstance.defaults.headers);
 			const response = await axiosInstance.get("/auth/profile");
       if (!response.data) {
         throw new Error("User data is missing");}
