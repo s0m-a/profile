@@ -17,7 +17,8 @@ dotenv.config();
 const allowedOrigins = [
     "http://localhost:3000",  // Allow localhost
     "http://172.20.10.13:3000", // Allow local network IP
-    "https://profile-ioxq46l65-somas-projects-250320be.vercel.app"
+    "https://vercel.com/somas-projects-250320be/profile/8wcLenyL6gsodR19SEQi45bqAD1v"
+    
   ];
   
 const corsOptions = {
