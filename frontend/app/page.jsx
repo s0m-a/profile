@@ -1,6 +1,6 @@
 'use client'
 import UserDashboard from "./dashboard/UserDashboard";
-import ManagerDashboard from "./dashboard/managerDashboard";
+import ManagerDashboard from "./dashboard/ManagerDashboard.jsx";
 import AdminProfile from "./admin/page";
 import { useEffect } from "react";
 import {  Loader} from 'lucide-react';
