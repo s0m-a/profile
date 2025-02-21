@@ -90,7 +90,6 @@ export const useUserStore = create((set, get) => ({
     try {
 		const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL ||"http://localhost:3001/api"
         window.location.href = `${apiBaseUrl}/auth/github`;
-      console.log(window.location.href);
     } catch (error) {
       console.error(error.response?.data?.message || "Registration failed!");
     }
