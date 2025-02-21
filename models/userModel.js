@@ -1,4 +1,4 @@
-import dbstorage from "../../RBAC/config/db.js";
+import dbstorage from "../config/db.js";
 import { DataTypes, Model, UUIDV4 } from "sequelize";
 
 class User extends Model{};
