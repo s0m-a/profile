@@ -15,22 +15,15 @@ dotenv.config();
 
 
 const allowedOrigins = [
-    "http://localhost:3000",  // Local development
-    "http://172.20.10.13:3000", // Local network IP
-    "profile-ioxq46l65-somas-projects-250320be.vercel.app" // Add your Vercel frontend URL
-];
-
+    "http://localhost:3000",  // Allow localhost
+    "http://172.20.10.13:3000", // Allow local network IP
+    "profile-ioxq46l65-somas-projects-250320be.vercel.app"
+  ];
+  
 const corsOptions = {
-    origin: (origin, callback) => {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error("Not allowed by CORS"));
-        }
-    },
-    credentials: true // Allow cookies if using authentication
+    origin: allowedOrigins,
+    credentials: true,
 };
-
 
 const PORT = process.env.PORT || 3001
 app.use(express.json());
