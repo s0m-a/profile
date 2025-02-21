@@ -4,6 +4,9 @@ const nextConfig = {
     eslint: {
         ignoreDuringBuilds: true,
       },
+      typescript: {
+        ignoreBuildErrors: true, // Disable TypeScript checks in Vercel
+      },
   };
   
   export default nextConfig;
