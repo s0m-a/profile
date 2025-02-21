@@ -1,6 +1,6 @@
 import User from "../models/userModel.js";
 import dbstorage from "../config/db.js";
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 import dotenv from 'dotenv'
 import jwt from 'jsonwebtoken'
 
