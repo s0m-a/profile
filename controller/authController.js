@@ -21,7 +21,7 @@ export default class AuthController{
         return refreshToken;
     }
     static setAccessTokenCookie(accessToken, res) {
-        res.cookie('accessToken', accessToken, {
+        res.cookie('auth_access_token', accessToken, {
             httpOnly: true,
             secure: true,
             sameSite: 'Strict',

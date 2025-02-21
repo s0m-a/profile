@@ -5,7 +5,7 @@ dotenv.config();
 const TOKEN_ACCESS_SECRET_KEY = process.env.TOKEN_ACCESS_SECRET_KEY;
 
   export const authenticateJWT = (req, res, next)=>{
-        const accessToken = req.cookies.accessToken;
+        const accessToken = req.cookies.auth_access_token;
   
         if(!accessToken || typeof accessToken !== 'string'){
             return res.status(401).json({message: "Unauthorized - Invalid access token format"});
