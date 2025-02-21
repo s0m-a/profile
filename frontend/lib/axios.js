@@ -5,5 +5,7 @@ const axiosInstance = axios.create({
     withCredentials: true
 });
 
+// Add default headers
+axiosInstance.defaults.headers.common['Accept'] = 'application/json';
 
 export default axiosInstance;
