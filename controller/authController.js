@@ -21,12 +21,13 @@ export default class AuthController{
         return refreshToken;
     }
     static setAccessTokenCookie(accessToken, res) {
-        res.cookie('auth_access_token', accessToken, {
+        res.cookie('accessToken', accessToken, {
             httpOnly: true,
             secure: true,
-            sameSite: 'None',
+            sameSite:"Lax",
             maxAge: 15 * 60 * 1000 // 15 minutes
         });
+        
         
     }
     
@@ -34,7 +35,7 @@ export default class AuthController{
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: true,
-            sameSite: 'Strict',
+            sameSite: 'Lax',
             maxAge: 7 * 24 * 60 * 1000 // 7 days
         });
        

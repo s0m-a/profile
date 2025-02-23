@@ -187,7 +187,6 @@ router.post('/auth/refresh',authenticateJWT, async (req, res) => {
 router.get("/auth/profile", authenticateJWT, async (req, res) => {
 	try {
 		res.json(req.user);
-        console.log(req.user)
 	} catch (error) {
 		res.status(500).json({ message: "Server error", error: error.message });
 	}

@@ -58,7 +58,9 @@ export const useUserStore = create((set, get) => ({
         throw new Error("User data is missing");}
 			set({ user: response.data, checkingAuth: false });
 		} catch (error) {
-			console.log(error.message);
+						 // Debug: Log headers and cookies
+			 console.log("🔍 Headers being sent:", axiosInstance.defaults.headers);
+			console.log("🚨 Auth error:", error.message);
 			set({ checkingAuth: false, user: null });
 		}
 	},
@@ -69,7 +71,7 @@ export const useUserStore = create((set, get) => ({
 
 		set({ checkingAuth: true });
 		try {
-			const response = await axios.post("/auth/refresh-token");
+			const response = await axiosInstance.post("/auth/refresh-token");
 			set({ checkingAuth: false });
 			return response.data;
 		} catch (error) {
@@ -117,7 +119,7 @@ axiosInstance.interceptors.response.use(
 				// If a refresh is already in progress, wait for it to complete
 				if (refreshPromise) {
 					await refreshPromise;
-					return axios(originalRequest);
+					return axiosInstance(originalRequest);
 				}
 
 				// Start a new refresh process
@@ -125,7 +127,7 @@ axiosInstance.interceptors.response.use(
 				await refreshPromise;
 				refreshPromise = null;
 
-				return axios(originalRequest);
+				return axiosInstance(originalRequest);
 			} catch (refreshError) {
 				// If refresh fails, redirect to login or handle as needed
 				useUserStore.getState().logout();

@@ -24,6 +24,7 @@ const allowedOrigins = [
 const corsOptions = {
     origin: allowedOrigins,
     credentials: true,
+    exposedHeaders: ["set-cookie"],
 };
 
 const PORT = process.env.PORT || 3001
