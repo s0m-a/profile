@@ -11,7 +11,6 @@ const REFRESH_ACCESS_SECRET_KEY = process.env.REFRESH_ACCESS_SECRET_KEY;
 
 export default class AuthController{
     static generateAccessToken(userId, role) {
-        console.log("🔑 Signing Token with Secret Key:", `"${TOKEN_ACCESS_SECRET_KEY}"`);
         return jwt.sign({ userId, role }, TOKEN_ACCESS_SECRET_KEY, { expiresIn: "1h" });
     }
     
@@ -25,7 +24,8 @@ export default class AuthController{
         res.cookie("accessToken", accessToken, {
             httpOnly: true,
             secure:true,
-            sameSite: "None", // Required for cross-site cookies
+            sameSite: "lax", // Required for cross-site cookies
+            domain: ".onrender.com",
             path: "/",
             maxAge: 15 * 60 * 1000, // 15 minutes
         });
@@ -36,7 +36,8 @@ export default class AuthController{
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
             secure: true,
-            sameSite: "None",
+            sameSite: "lax", // Required for cross-site cookies
+            domain: ".onrender.com",
             maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
         });
     }
