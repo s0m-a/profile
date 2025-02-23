@@ -14,7 +14,7 @@ const app = express();
 const allowedOrigins = [
     "http://localhost:3000",  // Allow localhost
     "http://172.20.10.13:3000", // Allow local network IP
-    "https://profile-eight-brown.vercel.app"
+    "https://profile-1-izl8.onrender.com"
     
   ];
   
