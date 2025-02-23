@@ -158,7 +158,7 @@ router.post('/auth/login', async (req, res) => {
 });
 
 // Route for refreshing access token
-router.post('/auth/refresh',authenticateJWT, async (req, res) => {
+router.post('/auth/refresh-token',authenticateJWT, async (req, res) => {
     try {
         const refreshToken = req.cookies.refreshToken;
         if (!refreshToken) {
@@ -187,6 +187,7 @@ router.post('/auth/refresh',authenticateJWT, async (req, res) => {
 router.get("/auth/profile", authenticateJWT, async (req, res) => {
 	try {
 		res.json(req.user);
+        
 	} catch (error) {
 		res.status(500).json({ message: "Server error", error: error.message });
 	}

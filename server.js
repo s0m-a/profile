@@ -1,19 +1,16 @@
 import express from 'express';
 import cors from 'cors';
 import dbstorage from './config/db.js'
-import dotenv from 'dotenv';
 import User from './models/userModel.js';
 import authRouter from './routes/authRoute.js';
 import userRoute from './routes/userRoute.js'
 import adminRoute from './routes/adminRoute.js'
 import managerRoute from './routes/managerRoute.js'
 import  cookieParser from 'cookie-parser'
-
+import dotenv from "dotenv";
+dotenv.config({ path: './.env' });
+console.log("Loaded Secret Key:", process.env.TOKEN_ACCESS_SECRET_KEY);
 const app = express();
-dotenv.config();
-
-
-
 const allowedOrigins = [
     "http://localhost:3000",  // Allow localhost
     "http://172.20.10.13:3000", // Allow local network IP
@@ -24,7 +21,6 @@ const allowedOrigins = [
 const corsOptions = {
     origin: allowedOrigins,
     credentials: true,
-    exposedHeaders: ["set-cookie"],
 };
 
 const PORT = process.env.PORT || 3001
