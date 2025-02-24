@@ -8,12 +8,17 @@ import adminRoute from './routes/adminRoute.js'
 import managerRoute from './routes/managerRoute.js'
 import  cookieParser from 'cookie-parser'
 import dotenv from "dotenv";
-dotenv.config({ path: './.env' });
-console.log("Loaded Secret Key:", process.env.TOKEN_ACCESS_SECRET_KEY);
+dotenv.config();
+
+
 const app = express();
+app.use(cookieParser());
+
 const allowedOrigins = [
-    "http://localhost:3000",  // Allow localhost
-    "http://172.20.10.13:3000", // Allow local network IP
+    // "http://localhost:3000",  // Allow localhost
+    // "http://172.20.10.13:3000", // Allow local network IP
+    // "http://127.0.0.1:3000",
+    "https://profile-pkr3.onrender.com",
     "https://profile-1-izl8.onrender.com"
     
   ];
@@ -25,12 +30,10 @@ const corsOptions = {
 
 const PORT = process.env.PORT || 3001
 app.use(express.json());
-app.use(cookieParser());
 app.use(cors(corsOptions));
 
 
 app.use('/api', authRouter);
-
 app.use('/api', userRoute);
 app.use('/api/admin', adminRoute);
 app.use('/api/manager', managerRoute);

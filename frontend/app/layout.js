@@ -1,4 +1,3 @@
-
 import "./globals.css";
 import {Toaster,toast} from 'react-hot-toast'
 import Navbar from "./components/navbar";

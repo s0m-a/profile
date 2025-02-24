@@ -1,7 +1,8 @@
 import express from 'express'
+import dotenv from 'dotenv'
+dotenv.config();
 import AuthController from '../controller/authController.js'
 import User from '../models/userModel.js'
-import dotenv from 'dotenv'
 import jwt from 'jsonwebtoken'
 import { authenticateJWT } from '../middleware/protectedRoute.js'
 
@@ -10,10 +11,10 @@ import session from "express-session"
 import googleStrategy from 'passport-google-oauth20'
 import GitHubStrategy from 'passport-github2'
 
-dotenv.config();
+
 const router = express.Router()
 const REFRESH_ACCESS_SECRET_KEY = process.env.REFRESH_ACCESS_SECRET_KEY;
-
+console.log(REFRESH_ACCESS_SECRET_KEY)
 
 // express session setup(stores users infor across request)
 router.use(session({
@@ -157,6 +158,20 @@ router.post('/auth/login', async (req, res) => {
     }
 });
 
+// Route for user profile
+router.get('/auth/profile', authenticateJWT, async (req, res) => {
+    try {
+        if (!req.user) {
+            return res.status(401).json({ error: 'Unauthorized' });
+        }
+
+        res.json( req.user );
+    } catch (error) {
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+
 // Route for refreshing access token
 router.post('/auth/refresh-token',authenticateJWT, async (req, res) => {
     try {
@@ -184,15 +199,7 @@ router.post('/auth/refresh-token',authenticateJWT, async (req, res) => {
     }
 });
 
-router.get("/auth/profile", authenticateJWT, async (req, res) => {
-	try {
-		res.json(req.user);
-        
-	} catch (error) {
-		res.status(500).json({ message: "Server error", error: error.message });
-	}
-});
-
+ 
 
 
 router.post('/auth/logout', (req, res) => {

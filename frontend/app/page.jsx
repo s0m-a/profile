@@ -29,7 +29,8 @@ export default function HomePage() {
       <div>
           {user.role === "admin" ? <AdminProfile /> :
           user.role === "manager" ? <ManagerDashboard /> :
-          <UserDashboard />}
+         <UserDashboard />
+          }
       </div>
   );
 }

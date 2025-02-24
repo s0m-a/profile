@@ -1,42 +1,55 @@
+import dotenv from 'dotenv';
+dotenv.config();
 import User from "../models/userModel.js";
 import dbstorage from "../config/db.js";
 import bcrypt from 'bcryptjs'
-import dotenv from 'dotenv'
 import jwt from 'jsonwebtoken'
 
-dotenv.config({ path: './.env' });
 
-const TOKEN_ACCESS_SECRET_KEY ="your_secret_key";
-const REFRESH_ACCESS_SECRET_KEY = process.env.REFRESH_ACCESS_SECRET_KEY;
 
 export default class AuthController{
+    static TOKEN_ACCESS_SECRET_KEY = process.env.TOKEN_ACCESS_SECRET_KEY;
+    static REFRESH_ACCESS_SECRET_KEY = process.env.REFRESH_ACCESS_SECRET_KEY;
+ 
     static generateAccessToken(userId, role) {
-        return jwt.sign({ userId, role }, TOKEN_ACCESS_SECRET_KEY, { expiresIn: "1h" });
+        if (!this.TOKEN_ACCESS_SECRET_KEY) {
+            throw new Error("TOKEN_ACCESS_SECRET_KEY is not set in environment variables");
+        }
+        const accessToken = jwt.sign(
+            { userId, role }, 
+            this.TOKEN_ACCESS_SECRET_KEY, 
+            { algorithm: 'HS256', expiresIn: '1h' } )
+        return accessToken;
     }
     
 
     static  generateRefreshToken(userId, role){
-        const refreshToken =  jwt.sign({userId, role}, REFRESH_ACCESS_SECRET_KEY, {expiresIn:'7d'})
+        if (!this.REFRESH_ACCESS_SECRET_KEY) {
+            throw new Error("REFRESH_ACCESS_SECRET_KEY is not set in environment variables");
+        }
+        const refreshToken =  jwt.sign({userId, role}, this.REFRESH_ACCESS_SECRET_KEY,  { algorithm: 'HS256', expiresIn: '1h' })
         return refreshToken;
     }
 
     static setAccessTokenCookie(accessToken, res) {
         res.cookie("accessToken", accessToken, {
             httpOnly: true,
-            secure:true,
-            sameSite: "lax", // Required for cross-site cookies
-            domain: ".onrender.com",
+            secure: true, 
+            sameSite: "lax",
             path: "/",
+            domain: ".onrender.com",
             maxAge: 15 * 60 * 1000, // 15 minutes
         });
+        
+        console.log("✅ Set Cookie: accessToken=", accessToken);
     }
     
 
-    static setRefreshTokenCookie(refreshToken, res) {
+    static  setRefreshTokenCookie(refreshToken, res) {
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
             secure: true,
-            sameSite: "lax", // Required for cross-site cookies
+            sameSite: "None", // Required for cross-site cookies
             domain: ".onrender.com",
             maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
         });
@@ -105,16 +118,13 @@ export default class AuthController{
               return { status: "error", message: "Invalid email or password" };
           }
         const userId = user.id;
-        const role = user.role || "user";;
-        const accessToken= this.generateAccessToken(userId, role);
-        const refreshToken = this.generateRefreshToken(userId, role);
-        this.setAccessTokenCookie(accessToken, res);
-        this.setRefreshTokenCookie(refreshToken, res);
+        const role = user.role;
+        const accessToken = AuthController.generateAccessToken(userId, role);
+        const refreshToken = AuthController.generateRefreshToken(userId, role);
+        AuthController.setAccessTokenCookie(accessToken, res);
+        AuthController.setRefreshTokenCookie(refreshToken, res);
         console.log("🔑 Access Token:", accessToken);
         console.log("🔑 Refresh Token:", refreshToken);
-    
-        this.setAccessTokenCookie(accessToken, res);
-        this.setRefreshTokenCookie(refreshToken, res);
     
         console.log("✅ Cookies Set, Sending Response...");
 
@@ -156,10 +166,10 @@ static async oAuthRegister(id, givenName, familyName,email, res){
             const role = user.role;
             console.log(user)
             await user.save();
-            const accessToken= this.generateAccessToken(userId, role);
-            const refreshToken = this.generateRefreshToken(userId, role);
-            this.setAccessTokenCookie(accessToken, res);
-            this.setRefreshTokenCookie(refreshToken, res);
+            const accessToken= generateAccessToken(userId, role);
+            const refreshToken = generateRefreshToken(userId, role);
+            setAccessTokenCookie(accessToken, res);
+            setRefreshTokenCookie(refreshToken, res);
             return {
                 status: 'success',
                 message: 'user registered, welcome',
@@ -168,10 +178,10 @@ static async oAuthRegister(id, givenName, familyName,email, res){
             // If the user exists and oAuthId is already set
             const userId = user.id;
             const role = user.role;
-            const accessToken = this.generateAccessToken(userId, role);
-            const refreshToken = this.generateRefreshToken(userId, role);
-            this.setAccessTokenCookie(accessToken, res);
-            this.setRefreshTokenCookie(refreshToken, res);
+            const accessToken = generateAccessToken(userId, role);
+            const refreshToken = generateRefreshToken(userId, role);
+            setAccessTokenCookie(accessToken, res);
+            setRefreshTokenCookie(refreshToken, res);
 
             return {
                 status: 'success',
@@ -187,10 +197,10 @@ static async oAuthRegister(id, givenName, familyName,email, res){
             const newUser = await User.create(creatData);
             const userId = newUser.id;
             const role = newUser.role;
-            const accessToken= this.generateAccessToken(userId, role);
-            const refreshToken = this.generateRefreshToken(userId, role);
-            this.setAccessTokenCookie(accessToken, res);
-            this.setRefreshTokenCookie(refreshToken, res);
+            const accessToken= generateAccessToken(userId, role);
+            const refreshToken = generateRefreshToken(userId, role);
+            setAccessTokenCookie(accessToken, res);
+            setRefreshTokenCookie(refreshToken, res);
             return {
                 status: 'success',
                 message: 'user registered, please log in',

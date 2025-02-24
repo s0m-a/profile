@@ -49,21 +49,18 @@ export const useUserStore = create((set, get) => ({
 	},
 
 	checkAuth: async () => {
-		set({ checkingAuth: true });
+		set({ checkingAuth: true }); 
 		try {
-			console.log("Checking auth...");
-			console.log("Headers being sent:", axiosInstance.defaults.headers);
-			const response = await axiosInstance.get("/auth/profile", { withCredentials: true });
-      if (!response.data) {
-        throw new Error("User data is missing");}
-			set({ user: response.data, checkingAuth: false });
+			const res = await axiosInstance.get('/auth/profile');
+			set({ user: res.data, isAuthenticated: true });
 		} catch (error) {
-						 // Debug: Log headers and cookies
-			 console.log("🔍 Headers being sent:", axiosInstance.defaults.headers);
-			console.log("🚨 Auth error:", error.message);
-			set({ checkingAuth: false, user: null });
+			console.error("🚨 Auth check failed:", error.response?.data || error.message);
+			set({ user: null, isAuthenticated: false });
+		} finally {
+			set({ checkingAuth: false });
 		}
 	},
+	
 
 	refreshToken: async () => {
 		// Prevent multiple simultaneous refresh attempts
